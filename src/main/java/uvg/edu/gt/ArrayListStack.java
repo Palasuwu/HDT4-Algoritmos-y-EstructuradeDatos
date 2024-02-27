@@ -1,5 +1,4 @@
 package uvg.edu.gt;
-
 import java.util.ArrayList;
 
 public class ArrayListStack<T> extends Stack<T>{

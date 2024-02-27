@@ -1,54 +1,31 @@
 package uvg.edu.gt;
-public class DobleLinkedList<T> extends List<T> {
 
-    private DoubleNode<T> start;
-    private DoubleNode<T> end;
+public class SingleLinkedList<T> extends List<T> {
+
     private int count;
-
-    public DobleLinkedList() {
-        start = null;
-        end = null;
-        count = 0;
-    }
+    private Node<T> start;
+    private Node<T> end;
 
     @Override
     public void InsertAtStart(T value) {
-        DoubleNode<T> newNode = new DoubleNode<T>(value);
-
+        Node<T> newNode = new Node<T>(value);
         if (IsEmpty()) {
-
             start = newNode;
             end = newNode;
-            start.setNext(start);
-            start.setPrevious(start);
         } else {
-
             newNode.setNext(start);
-            start.setPrevious(newNode);
-            newNode.setPrevious(end);
-            end.setNext(newNode);
             start = newNode;
         }
-
         count++;
     }
 
     @Override
     public void InsertAtEnd(T value) {
-
-        DoubleNode<T> newNode = new DoubleNode<T>(value);
-
-        if (IsEmpty()) {
-
+        Node<T> newNode = new Node<T>(value);
+        if(IsEmpty()) {
             start = newNode;
             end = newNode;
-            start.setNext(start);
-            start.setPrevious(start);
         } else {
-
-            newNode.setPrevious(end);
-            newNode.setNext(start);
-            start.setPrevious(newNode);
             end.setNext(newNode);
             end = newNode;
         }
@@ -59,84 +36,120 @@ public class DobleLinkedList<T> extends List<T> {
 
     @Override
     public void Insert(T value, int index) {
-
         if (IsEmpty())
         {
             InsertAtStart(value);
-        }
-        else
-        {
+        } else {
             if (index >= Count())
             {
                 InsertAtEnd(value);
-            }
-            else if (index == 0)
+            } else if (index == 0)
             {
                 InsertAtStart(value);
-            }
-            else if ((index > 0) && (index < Count()))
+            } else if ((index > 0) && (index < Count()))
             {
-                DoubleNode<T> newNode = new DoubleNode<T>(value);
-                DoubleNode<T> temp = start;
-                int i = 0;
+                Node<T> newNode = new Node<T>(value);
+                Node<T> pretemp = start;
+                Node<T> temp = start.getNext();
+                int i = 1;
 
 
                 while ((temp != null) && (i < index)) {
+                    pretemp = temp;
                     temp = temp.getNext();
                     i++;
                 }
 
 
                 newNode.setNext(temp);
-                newNode.setPrevious(temp.getPrevious());
-                temp.setPrevious(newNode);
-                newNode.getPrevious().setNext(newNode);
+                pretemp.setNext(newNode);
                 count++;
             }
         }
-
     }
 
     @Override
     public T Delete(int index) {
-        T deletedValue = start.getValue();
-        if(start.getNext() == null) {
-            start = null;
+
+        if (index == 0) {
+            return DeleteAtStart();
+        } else if (index == (Count() - 1)) {
+            return DeleteAtEnd();
+        } else if ((index > 0) && (index < (Count() - 1))) {
+            Node<T> pretemp = start;
+            Node<T> temp = start.getNext();
+            int i = 1;
+
+
+            while ((temp != null) && (i < (Count() - 1))) {
+                pretemp = temp;
+                temp = temp.getNext();
+                i++;
+            }
+
+            //Delete the node
+            pretemp.setNext(temp.getNext());
             count--;
-        }else {
-            start = start.getNext();
-            start.setPrevious(null);
-            count--;
+            return temp.getValue();
+        } else {
+            return null;
         }
-        return deletedValue;
+
     }
 
     @Override
     public T DeleteAtStart() {
+
         if (!IsEmpty()) {
-            DoubleNode<T> temp = start;
-            start = (DoubleNode<T>) start.getNext();
-            if (start == null) {
-                end = null;
-            } else {
-                start.setPrevious(null);
-            }
-            temp.setNext(null);
+            Node<T> temp = start;
+            start = start.getNext();
             count--;
             return temp.getValue();
         }
+
         return null;
     }
 
-
     @Override
     public T DeleteAtEnd() {
+        if (!IsEmpty())
+        {
+
+            if (Count() == 1)
+            {
+                Node<T> temp = start;
+                start = null;
+                end = null;
+                count--;
+                return temp.getValue();
+            }
+            else
+            {
+                Node<T> pretemp = start;
+                Node<T> temp = start.getNext();
+
+
+                while (temp != null)
+                {
+                    pretemp = temp;
+                    temp = temp.getNext();
+                }
+
+
+                end = pretemp;
+                end.setNext(null);
+                count--;
+                return temp.getValue();
+            }
+
+        }
 
         return null;
     }
 
     @Override
     public T Get(int index) {
+
         if (!IsEmpty())
         {
             if (index == 0)
@@ -149,7 +162,7 @@ public class DobleLinkedList<T> extends List<T> {
             }
             else if ((index > 0) && (index < (Count() - 1)))
             {
-                DoubleNode<T> temp = start;
+                Node<T> temp = start;
                 int i = 0;
                 while ((temp != null) && (i != index))
                 {
@@ -173,7 +186,6 @@ public class DobleLinkedList<T> extends List<T> {
         }
 
         return null;
-
     }
 
     @Override
@@ -183,8 +195,7 @@ public class DobleLinkedList<T> extends List<T> {
 
     @Override
     public int Count() {
+        // TODO Auto-generated method stub
         return count;
     }
-
-
 }

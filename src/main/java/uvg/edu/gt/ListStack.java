@@ -2,10 +2,6 @@ package uvg.edu.gt;
 public class ListStack<T> extends Stack<T>{
     private List<T> list;
 
-    /**
-     * Constructor of the List Stack
-     * @param listType the type of list to be used (31. single linked | 32. double linked)
-     */
     public ListStack(int listType){
         ListFactory factory = new ListFactory(listType);
         list = factory.createList();
